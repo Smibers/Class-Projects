@@ -1,6 +1,16 @@
+
+//Smith   Benjamin
+
+//COSC-311 fall2024
+//Project 1
+
+
+
+
 package main;
 
-public class DataBaseRecord {
+public class DataBaseRecord 
+{
 
 	private String ID;
     private String first;
@@ -15,37 +25,43 @@ public class DataBaseRecord {
    
 
 
-	public String getID() {
+	public String getID() 
+	{
 		return ID;
 	}
 
 
 
-	public void setID(String iD) {
+	public void setID(String iD) 
+	{
 		ID = iD;
 	}
 
 
 
-	public String getFirst() {
+	public String getFirst() 
+	{
 		return first;
 	}
 
 
 
-	public void setFirst(String first) {
+	public void setFirst(String first) 
+	{
 		this.first = first;
 	}
 
 
 
-	public String getLast() {
+	public String getLast() 
+	{
 		return last;
 	}
 
 
 
-	public void setLast(String last) {
+	public void setLast(String last) 
+	{
 		this.last = last;
 	}
 
@@ -54,10 +70,15 @@ public class DataBaseRecord {
 	public String toString()
     {
 		String output = "";
-	    if (last != null && first != null && ID != null) {
+	    if (last != null && first != null && ID != null) 
+	    {
 	        output = last + ", " + first + " (" + ID + ")";
+	        return output;
 	    }
-	    return output;
+	    else {	   
+	    	output=""; 
+	    	return output;
+	    }
     }
 
 }

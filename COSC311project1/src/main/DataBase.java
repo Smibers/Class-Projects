@@ -127,30 +127,23 @@ public class DataBase {
 		}
 	}
 
-	public void deleteIt() 
-	{
-		// delete a student object
-		// Note: output either "Deleted" or "ID not Found" and return to menu
-		Scanner sc = new Scanner(System.in);
-		System.out.print("Enter ID to delete: ");
-		String id = sc.nextLine();
+	public void deleteIt() {
+	    Scanner sc = new Scanner(System.in);
+	    System.out.print("Enter ID to delete: ");
+	    String id = sc.nextLine();
 
-		// find the index of the record to delete
-		int indexToDelete = ID.find(id); // This would now return -1 if the ID was not found
-		if (indexToDelete == -1) 
-		{
-			System.out.println("ID not found. Cannot delete.");
-			return;
-		}
+	    int indexToDelete = ID.find(id);
+	    if (indexToDelete == -1) {
+	        System.out.println("ID not found. Cannot delete.");
+	        return;
+	    }
 
-		// Delete the record from myDB
-		myDB.remove(id); // Remove from DataBaseArray
-		ID.remove(id); // Remove from ID index
-		First.remove(id); // Remove from First Name index
-		Last.remove(id); // Remove from Last Name index
-		System.out.println("Deleted ID: " + id);
-
+	    // Delete the record from myDB and update indices
+	    myDB.remove(id, ID, First, Last);
+	    System.out.println("Deleted ID: " + id);
 	}
+
+
 
 	public void findIt() 
 	{
@@ -181,25 +174,25 @@ public class DataBase {
 		}
 	}
 
-	public void ListByIDAscending() 
-	{
-		// List students by ID increasing
-		ID.iteratorInitFront();
-		while (ID.hasNext()) 
-		{
-			Integer temp = ID.getNext();
-			if (temp != null)
-			{
-				System.out.println(myDB.retrieve(temp));
-			}
-		}
+	public void ListByIDAscending() {
+	    ID.iteratorInitFront();
+	    while (ID.hasNext()) {
+	        int temp = ID.getNext();
+	        if (temp >= 0) {
+	            DataBaseRecord record = myDB.retrieve(temp);
+	            if (record != null) {
+	                System.out.println(record);
+	            }
+	        }
+	    }
 	}
+
 
 	public void ListByFirstAscending() 
 	{
 		// List students by first name increasing
-		First.iteratorInitFront();
-		while (First.hasNext()) 
+		First.iteratorInitFront(); // iterator == 0 at start.
+		while (First.hasNext()) // checks if the first has a next value
 		{
 			int temp = First.getNext();
 			System.out.println(myDB.retrieve(temp));

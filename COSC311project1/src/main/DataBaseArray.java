@@ -40,30 +40,37 @@ public class DataBaseArray
 		return records;
 	}
 
-	public void remove(String id) 
-	{
-		int indexToRemove = -1;
+	public void remove(String id, IndexArray idIndex, IndexArray firstIndex, IndexArray lastIndex) {
+	    int indexToRemove = -1;
 
-		for (int i = 0; i < elems; i++) 
-		{
-			if (records[i].getID().equalsIgnoreCase(id)) 
-			{
-				indexToRemove = i;
-				break; // Exit loop once found
-			}
-		}
+	    for (int i = 0; i < elems; i++) {
+	        if (records[i].getID().equalsIgnoreCase(id)) {
+	            indexToRemove = i;
+	            break; // Exit loop once found
+	        }
+	    }
 
-		if (indexToRemove == -1) 
-		{
-			System.out.println("ID not found. Cannot delete.");
-			return; // Early exit if not found
-		}
+	    if (indexToRemove == -1) {
+	        System.out.println("ID not found. Cannot delete.");
+	        return; // Early exit if not found
+	    }
 
-		// Shifting logic
-		for (int i = indexToRemove; i < elems - 1; i++) 
-		{
-			records[i] = records[i + 1]; // Shift left
-		}
-		records[--elems] = null; // Clear the last element
+	    // Remove the record from the IndexArrays
+	    idIndex.remove(records[indexToRemove].getID());
+	    firstIndex.remove(records[indexToRemove].getFirst());
+	    lastIndex.remove(records[indexToRemove].getLast());
+
+	    // Shifting logic
+	    for (int i = indexToRemove; i < elems - 1; i++) {
+	        records[i] = records[i + 1]; // Shift left
+	    }
+	    records[--elems] = null; // Clear the last element
+
+	    // Update the 'where' fields in IndexRecords in all IndexArrays
+	    idIndex.updateIndicesAfterRemoval(indexToRemove);
+	    firstIndex.updateIndicesAfterRemoval(indexToRemove);
+	    lastIndex.updateIndicesAfterRemoval(indexToRemove);
 	}
+
+
 }

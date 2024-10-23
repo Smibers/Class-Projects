@@ -1,5 +1,4 @@
 //Smith   Benjamin
-
 //COSC-311 fall2024
 //Project 1
 
@@ -10,17 +9,15 @@ public class IndexArray
 {
 //ordered array
 
-	// Fields
+	
 	public String ID;
-	public int iterator;
+	public int iterator; // where the "pointer" is in the array
 	private IndexRecord[] indexRecord;
-	public int elements;
-
-	// initialize new array with specific size
+	public int elements; 
 	public IndexArray(int size) 
 	{
-		this.indexRecord = new IndexRecord[size]; // Create an array with a specified size
-		this.iterator = 0; // Initialize iterator to 0
+		this.indexRecord = new IndexRecord[size]; 
+		this.iterator = 0; 
 		elements = 0;
 	}
 
@@ -33,10 +30,10 @@ public class IndexArray
 	// Sets the iterator to the back of the array:
 	public void iteratorInitBack() 
 	{
-		iterator = indexRecord.length - 1;
+		iterator = elements - 1;
 	}
 
-	// Method to get the record at a specific index using linear search
+	// Method to get the record using linear search
 	public int find(String key) 
 	{
 
@@ -44,34 +41,22 @@ public class IndexArray
 		{
 			if (indexRecord[i].getKey().equalsIgnoreCase(key)) 
 			{ // Use 'key' parameter
-				return indexRecord[i].getWhere(); // Return the index of the record
+				return indexRecord[i].getWhere(); 
 			}
 		}
-		return -1; // ID not found
+		return -1; 
 
 	}
 
 	public boolean hasNext() 
 	{
-		if (iterator <= indexRecord.length - 1)
-		{
-			return true;
-		} 
-		else 
-		{
-			return false;
-		}
+		return iterator < elements;
 	}
 
-	// Return true if iterator > 0; false otherwise:
+	
 	public boolean hasPrevious() 
 	{
-		// check if the iterator > 0:
-		if (iterator > 0) 
-		{
-			return true;
-		}
-		return false;
+		return iterator >= 0;
 	}
 
 	// Return the 'where' field from IndexRecord; then increment the iterator:
@@ -79,57 +64,37 @@ public class IndexArray
 	{
 		if (!hasNext()) 
 		{
-			return -1; // Return a special value indicating no more elements
+			return -1; 
 		}
-
-		// Loop to skip over null entries while ensuring iterator stays within bounds
-		while (iterator < indexRecord.length && indexRecord[iterator] == null) 
-		{
-			iterator++; // Move to the next element if the current one is null
-		}
-
-		// Final bounds check to prevent ArrayIndexOutOfBoundsException
-		if (iterator >= indexRecord.length) 
-		{
-			return -1; // Return special value instead of null
-		}
-
-		// If the current element is valid, proceed to get 'where' value
+		// get 'where' value
 		int where = indexRecord[iterator].getWhere();
 		iterator++;
 		return where;
 	}
-
-	public int getPrevious()
-	{
-		// Ensure that there are valid elements to iterate over
-		if (!hasPrevious()) 
-		{
-			throw new IndexOutOfBoundsException("No more elements.");
-		}
-
-		// Loop to skip over null entries
-		while (iterator >= 0 && indexRecord[iterator] == null) 
-		{
-			iterator--; // Move to the previous element if the current one is null
-		}
-
-		// Check if the iterator has gone out of bounds after skipping nulls
-		if (iterator < 0 || indexRecord[iterator] == null) 
-		{
-			throw new IndexOutOfBoundsException("No more valid elements.");
-		}
-
-		// Retrieve the 'where' field from the non-null IndexRecord
-		int where = indexRecord[iterator].getWhere();
-		iterator--; // Move the iterator to the previous element for the next call
-		return where;
+	//make sure that the indexRecord reflects the new positions of all elements after the removal.
+	public void updateIndicesAfterRemoval(int removedIndex) {
+	    for (int i = 0; i < elements; i++) {
+	        int where = indexRecord[i].getWhere();
+	        if (where > removedIndex) {
+	            indexRecord[i].setWhere(where - 1);
+	        }
+	    }
 	}
+
+	public int getPrevious() {
+	    if (!hasPrevious()) {
+	        return -1; // Indicate no more elements
+	    }
+	    int where = indexRecord[iterator].getWhere();
+	    iterator--;
+	    return where;
+	}
+
 
 	public void insert(IndexRecord record)
 	{
 
-		// Find the correct position to insert (to keep the array ordered)
+		// Find the correct position to insert (keep the array ordered)
 		int i;
 		for (i = elements - 1; i >= 0; i--) 
 		{
@@ -143,25 +108,29 @@ public class IndexArray
 		elements++;
 	}
 
-	public int remove(String key) 
-	{
+	public int remove(String key) {
+	    int index = -1;
 
-		int index = find(key);
-		// Find the index of the record to delete
-		int indexToRemove = -1;
+	    for (int i = 0; i < elements; i++) {
+	        if (indexRecord[i].getKey().equalsIgnoreCase(key)) {
+	            index = i;
+	            break;
+	        }
+	    }
 
-		// find the location and shifts the elements
-		if (index != -1) 
-		{
-			indexToRemove = indexRecord[index].getWhere();
-			for (int i = index; i < elements - 1; i++)
-			{
-				indexRecord[i] = indexRecord[i + 1];
-			}
-			elements--;
-		}
-		return indexToRemove;
+	    if (index == -1) {
+	        return -1; // Key not found
+	    }
 
+	    int indexToRemove = indexRecord[index].getWhere();
+
+	    // Shift the elements
+	    for (int i = index; i < elements - 1; i++) {
+	        indexRecord[i] = indexRecord[i + 1];
+	    }
+	    indexRecord[--elements] = null; // Clear the last element
+	    return indexToRemove;
 	}
+
 
 }

@@ -37,7 +37,7 @@ public class DataBaseArray
 		return records;
 	}
 
-	public void remove(String id, IndexArray idIndex, IndexArray firstIndex, IndexArray lastIndex) {
+	public void remove(String id, IndexLinked idIndex, IndexLinked firstIndex, IndexLinked lastIndex) {
 	    int indexToRemove = -1;
 
 	    for (int i = 0; i < elems; i++) {

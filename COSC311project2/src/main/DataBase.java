@@ -14,14 +14,14 @@ public class DataBase {
 	private Scanner file;
 	int move = 0;
 	private DataBaseArray myDB;
-	private IndexArray ID, First, Last;
+	private IndexLinked ID, First, Last;
 
 	public DataBase() {
 
 		myDB = new DataBaseArray(sz);
-		ID = new IndexArray(sz);
-		First = new IndexArray(sz);
-		Last = new IndexArray(sz);
+		ID = new IndexLinked();
+		First = new IndexLinked();
+		Last = new IndexLinked();
 
 		// actual file Path if needed = "/COSC311project1/data.txt";
 		try {
